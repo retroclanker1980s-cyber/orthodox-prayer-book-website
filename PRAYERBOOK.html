@@ -392,7 +392,6 @@
   </div>
 
   <script>
-    // Structure: 10 Main Categories -> 10 Subcategories -> 10 Sub-Subcategories -> 10 Prayers each
     const mainCategories = [
       "1. Morning Rule",
       "2. Evening Rule",
@@ -408,7 +407,6 @@
 
     const prayerData = {};
 
-    // Generate 3-tier deep navigation tree
     mainCategories.forEach((catName, cIdx) => {
       prayerData[catName] = {};
       
@@ -425,7 +423,6 @@
             
             let textBody = `In the Name of the Father, and of the Son, and of the Holy Spirit. Amen.\n\n`;
             textBody += `O Lord Jesus Christ, Son of God, have mercy upon us, Thy servants. (3 times)\n\n`;
-            textBody += `We offer this supplication under ${catName} → ${subCatName} → ${subSubCatName}.\n\n`;
             textBody += `Grant us wisdom, peace of heart, and steadfast faith as we offer our petitions unto Thee. Protect us from every evil, enlighten our minds, and direct our hearts in accordance with Thy holy will.\n\n`;
             textBody += `Through the prayers of our Holy Fathers, Lord Jesus Christ our God, have mercy on us and save us. Amen. (Prostration)`;
 
@@ -580,7 +577,6 @@
         }
       } else {
         const rawText = document.getElementById("prayerText").innerText;
-        // Clean rubric instructions in parentheses for audio playback
         const cleanedText = rawText.replace(/\([^)]*\)/g, '');
 
         ttsUtterance = new SpeechSynthesisUtterance(cleanedText);
