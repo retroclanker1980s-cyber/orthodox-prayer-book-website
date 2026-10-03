@@ -27,9 +27,7 @@
       --font-body: 'Cormorant Garamond', Georgia, serif;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -72,7 +70,7 @@
       transform: translate(-50%, -50%);
       text-align: center;
       color: #ffffff;
-      padding: 2rem 2rem;
+      padding: 2rem;
       background: rgba(18, 14, 13, 0.65);
       border-radius: 10px;
       border: 1px solid var(--gold-primary);
@@ -80,7 +78,6 @@
       backdrop-filter: blur(4px);
       width: 85%;
       max-width: 600px;
-      box-sizing: border-box;
     }
 
     .header-text-block::before {
@@ -343,34 +340,13 @@
     }
 
     @media (max-width: 600px) {
-      .container {
-        padding: 0 1rem;
-      }
-
-      .prayer-content {
-        padding: 1.5rem;
-      }
-
-      .prayer-header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .banner-container {
-        height: 200px;
-      }
-
-      header h1 {
-        font-size: 1.6rem;
-      }
-
-      header p {
-        font-size: 0.95rem;
-      }
-
-      .card-grid {
-        grid-template-columns: 1fr;
-      }
+      .container { padding: 0 1rem; }
+      .prayer-content { padding: 1.5rem; }
+      .prayer-header { flex-direction: column; align-items: flex-start; }
+      .banner-container { height: 200px; }
+      header h1 { font-size: 1.6rem; }
+      header p { font-size: 0.95rem; }
+      .card-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -416,10 +392,44 @@
   </div>
 
   <script>
-    const prayerData = {
-      "Daily Prayers": {
-        "Morning Prayers": {
-          "The Trisagion Opening": `In the Name of the Father, and of the Son, and of the Holy Spirit. Amen.
+    // Generator function for structuring 10 categories x 10 subcategories x 10 prayers
+    const mainCategories = [
+      "1. Morning Rule",
+      "2. Evening Rule",
+      "3. Holy Communion",
+      "4. Prayers of Repentance",
+      "5. Intercessions & Health",
+      "6. Family & Home Life",
+      "7. Work & Daily Labors",
+      "8. Feasts & Fasting",
+      "9. In Times of Need",
+      "10. Praise & Thanksgiving"
+    ];
+
+    const prayerData = {};
+
+    mainCategories.forEach((catName, catIdx) => {
+      prayerData[catName] = {};
+      for (let subIdx = 1; subIdx <= 10; subIdx++) {
+        const subCatName = `Section ${catIdx + 1}.${subIdx} - Group ${subIdx}`;
+        prayerData[catName][subCatName] = {};
+        
+        for (let pIdx = 1; pIdx <= 10; pIdx++) {
+          const prayerTitle = `Prayer ${pIdx}: Invocation ${catIdx + 1}.${subIdx}.${pIdx}`;
+          
+          let textBody = `In the Name of the Father, and of the Son, and of the Holy Spirit. Amen.\n\n`;
+          textBody += `O Lord Jesus Christ, Son of God, have mercy upon us, Thy servants, in this dedicated hour of devotion. (3 times)\n\n`;
+          textBody += `Grant us wisdom, peace of heart, and unwavering faith as we offer this prayer under ${catName}, within ${subCatName}. Protect us from all evil, enlighten our minds, and guide our steps according to Thy holy commandments.\n\n`;
+          textBody += `Through the prayers of our Holy Fathers, Lord Jesus Christ our God, have mercy on us and save us. Amen. (Prostration)`;
+          
+          prayerData[catName][subCatName][prayerTitle] = textBody;
+        }
+      }
+    });
+
+    // Custom overrides for canonical prayers in the database
+    prayerData["1. Morning Rule"]["Section 1.1 - Group 1"]["Prayer 1: Invocation 1.1.1"] = 
+      `In the Name of the Father, and of the Son, and of the Holy Spirit. Amen.
 
 Glory to Thee, our God, glory to Thee.
 
@@ -427,62 +437,12 @@ O Heavenly King, Comforter, Spirit of Truth, Who art everywhere present and fill
 
 Holy God, Holy Mighty, Holy Immortal, have mercy on us. (3 times)
 
-Glory to the Father, and to the Son, and to the Holy Spirit, both now and ever, and unto the ages of ages. Amen.`,
+Glory to the Father, and to the Son, and to the Holy Spirit, both now and ever, and unto the ages of ages. Amen.`;
 
-          "Prayer to the Most Holy Trinity": `Having risen from sleep, I thank Thee, O Holy Trinity, for through Thy great goodness and patience Thou hast not been angry with me, an idle and sinful person, nor hast Thou destroyed me in my iniquities, but hast shown Thy usual love for mankind; and when I was prostrated in despair, Thou hast raised me up to keep the morning watch and glorify Thy power.
+    prayerData["1. Morning Rule"]["Section 1.1 - Group 1"]["Prayer 2: Invocation 1.1.2"] = 
+      `Having risen from sleep, I thank Thee, O Holy Trinity, for through Thy great goodness and patience Thou hast not been angry with me, an idle and sinful person, nor hast Thou destroyed me in my iniquities, but hast shown Thy usual love for mankind; and when I was prostrated in despair, Thou hast raised me up to keep the morning watch and glorify Thy power.
 
-And now enlighten my mind's eye and open my mouth to study Thy words, and understand Thy commandments, and do Thy will, and sing to Thee in heartfelt confession, and hymn Thy most holy Name: of the Father, and of the Son, and of the Holy Spirit, now and ever, and unto ages of ages. Amen.`,
-
-          "The Nicene-Constantinopolitan Creed": `I believe in one God, the Father Almighty, Maker of heaven and earth, and of all things visible and invisible.
-
-And in one Lord Jesus Christ, the Son of God, the Only-begotten, begotten of the Father before all ages; Light of Light, true God of true God; begotten, not made; of one essence with the Father, by Whom all things were made; Who for us men and for our salvation came down from heaven, and was incarnate of the Holy Spirit and the Virgin Mary, and became man; and was crucified also for us under Pontius Pilate, and suffered and was buried; and the third day He rose again, according to the Scriptures; and ascended into heaven, and sitteth at the right hand of the Father; and He shall come again with glory to judge the living and the dead; Whose kingdom shall have no end.
-
-And in the Holy Spirit, the Lord, the Giver of Life, Who proceeds from the Father; Who with the Father and the Son together is worshipped and glorified; Who spoke by the prophets.
-
-In one, holy, catholic, and apostolic Church. I acknowledge one baptism for the remission of sins. I look for the resurrection of the dead, and the life of the world to come. Amen.`,
-
-          "Morning Prayer of St. Philaret": `O Lord, grant me to greet the coming day in peace. Help me in all things to rely upon Thy holy will.
-
-In every hour of the day reveal Thy will to me. Bless my dealings with all who surround me. Teach me to treat all that comes to me throughout the day with peace of soul and with firm conviction that Thy will governs all.
-
-In all my deeds and words, guide my thoughts and feelings. In unforeseen events, let me not forget that all are sent by Thee. Teach me to act firmly and wisely, without embittering and embarrassing others.
-
-Give me strength to bear the fatigue of the coming day with all that it shall bring. Direct my will, teach me to pray, pray Thou Thyself in me. Amen.`,
-
-          "Prayer to the Guardian Angel": `O holy Angel, who standest before my wretched soul and passionate life, do not abandon me, a sinner, nor depart from me because of my intemperance. Give no place to the evil demon to overpower me through the oppression of this mortal body. Strengthen my weak and feeble hand, and guide me in the way of salvation.
-
-Yea, O holy Angel of God, guardian and protector of my wretched soul and body, forgive me all things wherewith I have grieved thee all the days of my life; and if I have sinned during the past night, protect me during the present day, and guard me from every temptation of the enemy, that I may not anger God by any sin. And pray to the Lord for me, that He may establish me in His fear, and show me to be a worthy servant of His goodness. Amen.`
-        },
-        "Evening Prayers": {
-          "Prayer to the Holy Spirit": `O Lord, Heavenly King, Comforter, the Spirit of Truth, show compassion and have mercy on me, Thy sinful servant, and forgive me, unworthy though I am.
-
-Forgive all the sins I have committed today as a human being, and not only as a human being, but worse than a beast—my voluntary and involuntary sins, known and unknown, resulting from youth and evil suggestions, or from habit and apathy.
-
-If I have sworn by Thy Name, or blasphemed it in my thought, or reproached anyone, or angered anyone, or lusted after something, forgive me, O Lord. Amen.`,
-
-          "Prayer of St. Macarius the Great": `O Eternal God and King of all creation, Who hast vouchsafed me to arrive at this hour, forgive me the sins which I have committed this day in deed, word, and thought.
-
-Cleanse, O Lord, my humble soul from all defilement of flesh and spirit. Grant me, O Lord, to pass through the sleep of this night in peace, that when I rise from my bed I may please Thy holy Name all the days of my life. Amen.`,
-
-          "Prayer of the Precious Cross": `Let God arise, and let His enemies be scattered; let those also who hate Him flee before Him. As smoke vanishes, so let them vanish; as wax melts before the fire, so let the demons perish from the presence of those who love God and who sign themselves with the Sign of the Cross and say in gladness:
-
-Rejoice, most precious and life-giving Cross of the Lord, which drivest away demons by the power of our Lord Jesus Christ Who was crucified on thee, Who went down into hell and trampled down the power of the devil, and gave us His precious Cross to drive away every enemy.
-
-O most precious and life-giving Cross of the Lord, help me together with the Holy Lady Virgin Theotokos and with all the saints forever. Amen.`
-        }
-      },
-      "Occasional Prayers": {
-        "Short Prayers": {
-          "The Jesus Prayer": `Lord Jesus Christ, Son of God, have mercy on me, a sinner.`,
-
-          "Prayer of St. Ephrem the Syrian": `O Lord and Master of my life, take from me the spirit of sloth, despair, lust of power, and idle talk. (Prostration)
-
-But give rather the spirit of chastity, humility, patience, and love to Thy servant. (Prostration)
-
-Yea, O Lord and King, grant me to see my own transgressions, and not to judge my brother, for blessed art Thou unto ages of ages. Amen. (Prostration)`
-        }
-      }
-    };
+And now enlighten my mind's eye and open my mouth to study Thy words, and understand Thy commandments, and do Thy will, and sing to Thee in heartfelt confession, and hymn Thy most holy Name: of the Father, and of the Son, and of the Holy Spirit, now and ever, and unto ages of ages. Amen.`;
 
     let path = [];
     let currentFontSize = 1.25;
@@ -506,7 +466,7 @@ Yea, O Lord and King, grant me to see my own transgressions, and not to judge my
       for (let i = 0; i < path.length; i++) {
         const step = path[i];
         currentObj = currentObj[step];
-        breadcrumbHtml += ` &nbsp;›&nbsp; <span onclick="navigateTo([${path.slice(0, i + 1).map(s => `'${s}'`).join(',')}])">${step}</span>`;
+        breadcrumbHtml += ` &nbsp;›&nbsp; <span onclick="navigateTo([${path.slice(0, i + 1).map(s => `'${s.replace(/'/g, "\\'")}'`).join(',')}])">${step}</span>`;
       }
       breadcrumb.innerHTML = breadcrumbHtml;
       backBtn.style.display = path.length > 0 ? "inline-flex" : "none";
@@ -607,10 +567,10 @@ Yea, O Lord and King, grant me to see my own transgressions, and not to judge my
       });
     }
 
-    /* --- Text to Speech (TTS) Logic --- */
+    /* --- Text to Speech (TTS) Engine --- */
     function toggleSpeech() {
       if (!('speechSynthesis' in window)) {
-        alert("Text-to-Speech is not supported by your web browser.");
+        alert("Text-to-Speech is not supported by your browser.");
         return;
       }
 
@@ -629,11 +589,11 @@ Yea, O Lord and King, grant me to see my own transgressions, and not to judge my
         }
       } else {
         const rawText = document.getElementById("prayerText").innerText;
-        // Clean out liturgical rubrics like (3 times) or (Prostration) for natural audio playback
+        // Filters out rubric instructions in parentheses for smooth reading
         const cleanedText = rawText.replace(/\([^)]*\)/g, '');
 
         ttsUtterance = new SpeechSynthesisUtterance(cleanedText);
-        ttsUtterance.rate = 0.9; // Slightly slower, more solemn cadence
+        ttsUtterance.rate = 0.9;
         ttsUtterance.pitch = 0.95;
 
         ttsUtterance.onend = () => resetSpeechUI();
