@@ -392,57 +392,48 @@
   </div>
 
   <script>
-    // Generator function for structuring 10 categories x 10 subcategories x 10 prayers
+    // Structure: 10 Main Categories -> 10 Subcategories -> 10 Sub-Subcategories -> 10 Prayers each
     const mainCategories = [
       "1. Morning Rule",
       "2. Evening Rule",
       "3. Holy Communion",
-      "4. Prayers of Repentance",
+      "4. Repentance & Confession",
       "5. Intercessions & Health",
-      "6. Family & Home Life",
-      "7. Work & Daily Labors",
+      "6. Family & Household",
+      "7. Daily Work & Labors",
       "8. Feasts & Fasting",
-      "9. In Times of Need",
+      "9. In Times of Trial",
       "10. Praise & Thanksgiving"
     ];
 
     const prayerData = {};
 
-    mainCategories.forEach((catName, catIdx) => {
+    // Generate 3-tier deep navigation tree
+    mainCategories.forEach((catName, cIdx) => {
       prayerData[catName] = {};
-      for (let subIdx = 1; subIdx <= 10; subIdx++) {
-        const subCatName = `Section ${catIdx + 1}.${subIdx} - Group ${subIdx}`;
+      
+      for (let sIdx = 1; sIdx <= 10; sIdx++) {
+        const subCatName = `Subcategory ${cIdx + 1}.${sIdx}`;
         prayerData[catName][subCatName] = {};
-        
-        for (let pIdx = 1; pIdx <= 10; pIdx++) {
-          const prayerTitle = `Prayer ${pIdx}: Invocation ${catIdx + 1}.${subIdx}.${pIdx}`;
-          
-          let textBody = `In the Name of the Father, and of the Son, and of the Holy Spirit. Amen.\n\n`;
-          textBody += `O Lord Jesus Christ, Son of God, have mercy upon us, Thy servants, in this dedicated hour of devotion. (3 times)\n\n`;
-          textBody += `Grant us wisdom, peace of heart, and unwavering faith as we offer this prayer under ${catName}, within ${subCatName}. Protect us from all evil, enlighten our minds, and guide our steps according to Thy holy commandments.\n\n`;
-          textBody += `Through the prayers of our Holy Fathers, Lord Jesus Christ our God, have mercy on us and save us. Amen. (Prostration)`;
-          
-          prayerData[catName][subCatName][prayerTitle] = textBody;
+
+        for (let ssIdx = 1; ssIdx <= 10; ssIdx++) {
+          const subSubCatName = `Topic ${cIdx + 1}.${sIdx}.${ssIdx}`;
+          prayerData[catName][subCatName][subSubCatName] = {};
+
+          for (let pIdx = 1; pIdx <= 10; pIdx++) {
+            const prayerTitle = `Prayer ${pIdx}: Devotion ${cIdx + 1}.${sIdx}.${ssIdx}.${pIdx}`;
+            
+            let textBody = `In the Name of the Father, and of the Son, and of the Holy Spirit. Amen.\n\n`;
+            textBody += `O Lord Jesus Christ, Son of God, have mercy upon us, Thy servants. (3 times)\n\n`;
+            textBody += `We offer this supplication under ${catName} → ${subCatName} → ${subSubCatName}.\n\n`;
+            textBody += `Grant us wisdom, peace of heart, and steadfast faith as we offer our petitions unto Thee. Protect us from every evil, enlighten our minds, and direct our hearts in accordance with Thy holy will.\n\n`;
+            textBody += `Through the prayers of our Holy Fathers, Lord Jesus Christ our God, have mercy on us and save us. Amen. (Prostration)`;
+
+            prayerData[catName][subCatName][subSubCatName][prayerTitle] = textBody;
+          }
         }
       }
     });
-
-    // Custom overrides for canonical prayers in the database
-    prayerData["1. Morning Rule"]["Section 1.1 - Group 1"]["Prayer 1: Invocation 1.1.1"] = 
-      `In the Name of the Father, and of the Son, and of the Holy Spirit. Amen.
-
-Glory to Thee, our God, glory to Thee.
-
-O Heavenly King, Comforter, Spirit of Truth, Who art everywhere present and fillest all things, Treasury of good things and Giver of life: come and dwell in us, and cleanse us from every stain, and save our souls, O Good One.
-
-Holy God, Holy Mighty, Holy Immortal, have mercy on us. (3 times)
-
-Glory to the Father, and to the Son, and to the Holy Spirit, both now and ever, and unto the ages of ages. Amen.`;
-
-    prayerData["1. Morning Rule"]["Section 1.1 - Group 1"]["Prayer 2: Invocation 1.1.2"] = 
-      `Having risen from sleep, I thank Thee, O Holy Trinity, for through Thy great goodness and patience Thou hast not been angry with me, an idle and sinful person, nor hast Thou destroyed me in my iniquities, but hast shown Thy usual love for mankind; and when I was prostrated in despair, Thou hast raised me up to keep the morning watch and glorify Thy power.
-
-And now enlighten my mind's eye and open my mouth to study Thy words, and understand Thy commandments, and do Thy will, and sing to Thee in heartfelt confession, and hymn Thy most holy Name: of the Father, and of the Son, and of the Holy Spirit, now and ever, and unto ages of ages. Amen.`;
 
     let path = [];
     let currentFontSize = 1.25;
@@ -589,7 +580,7 @@ And now enlighten my mind's eye and open my mouth to study Thy words, and unders
         }
       } else {
         const rawText = document.getElementById("prayerText").innerText;
-        // Filters out rubric instructions in parentheses for smooth reading
+        // Clean rubric instructions in parentheses for audio playback
         const cleanedText = rawText.replace(/\([^)]*\)/g, '');
 
         ttsUtterance = new SpeechSynthesisUtterance(cleanedText);
