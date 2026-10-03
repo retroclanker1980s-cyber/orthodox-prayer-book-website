@@ -287,6 +287,7 @@
       padding-bottom: 1rem;
       margin-bottom: 2rem;
       gap: 1rem;
+      flex-wrap: wrap;
     }
 
     .prayer-title {
@@ -299,6 +300,8 @@
     .prayer-toolbar {
       display: flex;
       gap: 0.5rem;
+      align-items: center;
+      flex-wrap: wrap;
     }
 
     .tool-btn {
@@ -316,6 +319,12 @@
     .tool-btn:hover {
       border-color: var(--gold-primary);
       color: var(--accent-burgundy);
+    }
+
+    .tool-btn.active {
+      background: var(--accent-burgundy);
+      color: #ffffff;
+      border-color: var(--accent-burgundy);
     }
 
     .prayer-text {
@@ -394,6 +403,8 @@
       <div class="prayer-header">
         <h2 id="prayerTitle" class="prayer-title"></h2>
         <div class="prayer-toolbar">
+          <button class="tool-btn" id="ttsBtn" onclick="toggleSpeech()" title="Read prayer aloud">🔊 Read Aloud</button>
+          <button class="tool-btn" id="stopTtsBtn" onclick="stopSpeech()" title="Stop audio" style="display:none;">⏹ Stop</button>
           <button class="tool-btn" onclick="adjustFontSize(1)" title="Increase text size">A+</button>
           <button class="tool-btn" onclick="adjustFontSize(-1)" title="Decrease text size">A-</button>
           <button class="tool-btn" onclick="copyPrayer()" title="Copy prayer text">📋 Copy</button>
@@ -408,7 +419,7 @@
     const prayerData = {
       "Daily Prayers": {
         "Morning Prayers": {
-          "The Trisagion Prayers": `In the Name of the Father, and of the Son, and of the Holy Spirit. Amen.
+          "The Trisagion Opening": `In the Name of the Father, and of the Son, and of the Holy Spirit. Amen.
 
 Glory to Thee, our God, glory to Thee.
 
@@ -422,7 +433,7 @@ Glory to the Father, and to the Son, and to the Holy Spirit, both now and ever, 
 
 And now enlighten my mind's eye and open my mouth to study Thy words, and understand Thy commandments, and do Thy will, and sing to Thee in heartfelt confession, and hymn Thy most holy Name: of the Father, and of the Son, and of the Holy Spirit, now and ever, and unto ages of ages. Amen.`,
 
-          "The Nicene Creed": `I believe in one God, the Father Almighty, Maker of heaven and earth, and of all things visible and invisible.
+          "The Nicene-Constantinopolitan Creed": `I believe in one God, the Father Almighty, Maker of heaven and earth, and of all things visible and invisible.
 
 And in one Lord Jesus Christ, the Son of God, the Only-begotten, begotten of the Father before all ages; Light of Light, true God of true God; begotten, not made; of one essence with the Father, by Whom all things were made; Who for us men and for our salvation came down from heaven, and was incarnate of the Holy Spirit and the Virgin Mary, and became man; and was crucified also for us under Pontius Pilate, and suffered and was buried; and the third day He rose again, according to the Scriptures; and ascended into heaven, and sitteth at the right hand of the Father; and He shall come again with glory to judge the living and the dead; Whose kingdom shall have no end.
 
@@ -434,7 +445,7 @@ In one, holy, catholic, and apostolic Church. I acknowledge one baptism for the 
 
 In every hour of the day reveal Thy will to me. Bless my dealings with all who surround me. Teach me to treat all that comes to me throughout the day with peace of soul and with firm conviction that Thy will governs all.
 
-In all my deeds and words, guide my thoughts and feelings. In unforseen events, let me not forget that all are sent by Thee. Teach me to act firmly and wisely, without embittering and embarrassing others.
+In all my deeds and words, guide my thoughts and feelings. In unforeseen events, let me not forget that all are sent by Thee. Teach me to act firmly and wisely, without embittering and embarrassing others.
 
 Give me strength to bear the fatigue of the coming day with all that it shall bring. Direct my will, teach me to pray, pray Thou Thyself in me. Amen.`,
 
@@ -449,54 +460,19 @@ Forgive all the sins I have committed today as a human being, and not only as a 
 
 If I have sworn by Thy Name, or blasphemed it in my thought, or reproached anyone, or angered anyone, or lusted after something, forgive me, O Lord. Amen.`,
 
-          "Prayer of St. Macarius": `O Eternal God and King of all creation, Who hast vouchsafed me to arrive at this hour, forgive me the sins which I have committed this day in deed, word, and thought.
+          "Prayer of St. Macarius the Great": `O Eternal God and King of all creation, Who hast vouchsafed me to arrive at this hour, forgive me the sins which I have committed this day in deed, word, and thought.
 
 Cleanse, O Lord, my humble soul from all defilement of flesh and spirit. Grant me, O Lord, to pass through the sleep of this night in peace, that when I rise from my bed I may please Thy holy Name all the days of my life. Amen.`,
 
-          "Prayer of St. Antiochus": `O Ruler of all, Word of the Father, Thou Who art Thyself perfect, Jesus Christ, for the sake of Thy great mercy never depart from me, Thy servant, but abide in me always. O Jesus, Good Shepherd of Thy sheep, deliver me not to the revolt of the serpent, and leave me not to the will of Satan, for the seed of corruption is in me.
-
-Do Thou, O Lord God worshipped in holiness, Holy King Jesus Christ, preserve me while I sleep by the unextinguishable Light, Thy Holy Spirit, by Whom Thou didst sanctify Thy disciples. Grant also, O Lord, to me, Thy unworthy servant, Thy salvation upon my bed. Enlighten my mind with the light of the understanding of Thy holy Gospel. Amen.`,
-
-          "Prayer to the Mother of God": `O Good Mother of the Good King, most pure and blessed Theotokos Mary, pour out the mercy of thy Son and our God upon my passionate soul, and by thy prayers guide me to good works, that I may pass the remaining time of my life without stain, and through thee attain Paradise, O Virgin Theotokos, who alone art pure and blessed. Amen.`,
-
-          "Prayer of the Holy Cross": `Let God arise, and let His enemies be scattered; let those also who hate Him flee before Him. As smoke vanishes, so let them vanish; as wax melts before the fire, so let the demons perish from the presence of those who love God and who sign themselves with the Sign of the Cross and say in gladness:
+          "Prayer of the Precious Cross": `Let God arise, and let His enemies be scattered; let those also who hate Him flee before Him. As smoke vanishes, so let them vanish; as wax melts before the fire, so let the demons perish from the presence of those who love God and who sign themselves with the Sign of the Cross and say in gladness:
 
 Rejoice, most precious and life-giving Cross of the Lord, which drivest away demons by the power of our Lord Jesus Christ Who was crucified on thee, Who went down into hell and trampled down the power of the devil, and gave us His precious Cross to drive away every enemy.
 
 O most precious and life-giving Cross of the Lord, help me together with the Holy Lady Virgin Theotokos and with all the saints forever. Amen.`
         }
       },
-      "Mealtime Prayers": {
-        "Before Meals": {
-          "Lord's Prayer & Blessing": `Our Father, Who art in heaven, hallowed be Thy name. Thy kingdom come, Thy will be done, on earth as it is in heaven. Give us this day our daily bread, and forgive us our trespasses, as we forgive those who trespass against us. And lead us not into temptation, but deliver us from evil.
-
-Glory to the Father, and to the Son, and to the Holy Spirit, both now and ever, and unto the ages of ages. Amen.
-
-Lord, have mercy (3 times). Father, bless.
-
-Christ our God, bless the food and drink of Thy servants, for Thou art holy, always, now and ever, and unto the ages of ages. Amen.`,
-
-          "Blessing of Food for Fasting Days": `The poor shall eat and be satisfied, and those who seek the Lord shall praise Him; their hearts shall live forever.
-
-Glory to the Father, and to the Son, and to the Holy Spirit, both now and ever, and unto ages of ages. Amen.
-
-Lord, have mercy (3 times). Father, bless.
-
-Christ our God, bless the fast-day food and drink of Thy servants, for Thou art holy, always, now and ever, and unto ages of ages. Amen.`
-        },
-        "After Meals": {
-          "Thanksgiving After Meals": `We thank Thee, O Christ our God, for Thou hast satisfied us with Thy earthly gifts. Deprive us not also of Thy Heavenly Kingdom, but as Thou camest among Thy disciples, O Savior, giving them peace, come unto us and save us.
-
-Glory to the Father, and to the Son, and to the Holy Spirit, both now and ever, and unto the ages of ages. Amen.
-
-Lord, have mercy (3 times). Father, bless. Amen.`
-        },
-        "Preparation of Food": {
-          "Prayer Before Cooking": `O Creator and Author of all things, God Who giveth spiritual grace and bestoweth eternal salvation: Do Thou, the same Lord, send down Thy Holy Spirit with a blessing from on high upon these provisions, that those who prepare and consume them may be filled with health, strength, and heavenly peace, through Jesus Christ our Lord. Amen.`
-        }
-      },
       "Occasional Prayers": {
-        "Short Daily Prayers": {
+        "Short Prayers": {
           "The Jesus Prayer": `Lord Jesus Christ, Son of God, have mercy on me, a sinner.`,
 
           "Prayer of St. Ephrem the Syrian": `O Lord and Master of my life, take from me the spirit of sloth, despair, lust of power, and idle talk. (Prostration)
@@ -504,36 +480,16 @@ Lord, have mercy (3 times). Father, bless. Amen.`
 But give rather the spirit of chastity, humility, patience, and love to Thy servant. (Prostration)
 
 Yea, O Lord and King, grant me to see my own transgressions, and not to judge my brother, for blessed art Thou unto ages of ages. Amen. (Prostration)`
-        },
-        "Prayers for Loved Ones": {
-          "Prayer for One's Spiritual Father": `O Lord Jesus Christ our God, look down with Thy merciful eye upon Thy servant, my Spiritual Father (Name), and deliver him from every temptation, sorrow, and distress. Grant him health of soul and length of days, and guide my unworthy self through his holy prayers unto eternal life. Amen.`,
-
-          "Prayer for a Sick Person": `O Lord Almighty, the Healer of our souls and bodies, Who abasest and liftest up, Who chastinest and healest also: visit Thy servant who is sick with Thy mercy.
-
-Stretch forth Thine arm which is full of healing and health, and raise him/her up from his/her bed, and cure his/her illness. Rebuke the spirit of weakness, drive away from him/her all pain, all sores, all fever and ague.
-
-If he/she has sins or transgressions, grant remission and forgiveness, for Thou art the Lover of mankind. Amen.`,
-
-          "Prayer for the Departed": `Give rest, O Lord, to the soul of Thy departed servant (Name), in a place of light, a place of green pasture, a place of repose, where all sickness, sorrow, and sighing have fled away. 
-
-Forgive every sin committed by him/her in word, deed, or thought, in Thy goodness and love for mankind, for there is no man who lives and does not sin. Thou alone art without sin, Thy righteousness is an everlasting righteousness, and Thy word is truth. Amen.`
-        },
-        "Prayers Before Work & Travel": {
-          "Prayer Before Reading Scripture": `Illumine our hearts, O Master Who lovest mankind, with the pure light of Thy divine knowledge. Open the eyes of our mind to the understanding of Thy Gospel teachings. 
-
-Instill in us also the fear of Thy blessed commandments, that trampling down all carnal desires, we may enter upon a spiritual manner of living, both thinking and doing such things as are well-pleasing unto Thee. For Thou art the illumination of our souls and bodies, O Christ our God, and unto Thee we ascribe glory, together with Thy Father Who is from everlasting, and Thy all-holy, good, and life-creating Spirit, now and ever, and unto ages of ages. Amen.`,
-
-          "Prayer for Travellers": `O Lord Jesus Christ our God, the true and living Way, Who didst deem it worthy to travel with Thy supposed father Joseph and Thy most pure Mother to Egypt, and Who didst travel with Luke and Cleopas to Emmaus:
-
-We now humbly beseech Thee, O Most Holy Master, do Thou travel also with Thy servant(s). Deliver us from every storm and danger, preserve us in safety, and grant us a peaceful journey and a safe return. Amen.`
         }
       }
     };
 
     let path = [];
     let currentFontSize = 1.25;
+    let ttsUtterance = null;
 
     function render() {
+      stopSpeech();
       const grid = document.getElementById("navigationGrid");
       const prayerView = document.getElementById("prayerView");
       const breadcrumb = document.getElementById("breadcrumb");
@@ -649,6 +605,64 @@ We now humbly beseech Thee, O Most Holy Master, do Thou travel also with Thy ser
       navigator.clipboard.writeText(`${title}\n\n${text}`).then(() => {
         alert("Prayer text copied to clipboard!");
       });
+    }
+
+    /* --- Text to Speech (TTS) Logic --- */
+    function toggleSpeech() {
+      if (!('speechSynthesis' in window)) {
+        alert("Text-to-Speech is not supported by your web browser.");
+        return;
+      }
+
+      const ttsBtn = document.getElementById("ttsBtn");
+      const stopBtn = document.getElementById("stopTtsBtn");
+
+      if (window.speechSynthesis.speaking) {
+        if (window.speechSynthesis.paused) {
+          window.speechSynthesis.resume();
+          ttsBtn.innerText = "⏸ Pause";
+          ttsBtn.classList.add("active");
+        } else {
+          window.speechSynthesis.pause();
+          ttsBtn.innerText = "▶ Resume";
+          ttsBtn.classList.remove("active");
+        }
+      } else {
+        const rawText = document.getElementById("prayerText").innerText;
+        // Clean out liturgical rubrics like (3 times) or (Prostration) for natural audio playback
+        const cleanedText = rawText.replace(/\([^)]*\)/g, '');
+
+        ttsUtterance = new SpeechSynthesisUtterance(cleanedText);
+        ttsUtterance.rate = 0.9; // Slightly slower, more solemn cadence
+        ttsUtterance.pitch = 0.95;
+
+        ttsUtterance.onend = () => resetSpeechUI();
+        ttsUtterance.onerror = () => resetSpeechUI();
+
+        window.speechSynthesis.speak(ttsUtterance);
+        ttsBtn.innerText = "⏸ Pause";
+        ttsBtn.classList.add("active");
+        stopBtn.style.display = "inline-flex";
+      }
+    }
+
+    function stopSpeech() {
+      if ('speechSynthesis' in window && window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
+      }
+      resetSpeechUI();
+    }
+
+    function resetSpeechUI() {
+      const ttsBtn = document.getElementById("ttsBtn");
+      const stopBtn = document.getElementById("stopTtsBtn");
+      if (ttsBtn) {
+        ttsBtn.innerText = "🔊 Read Aloud";
+        ttsBtn.classList.remove("active");
+      }
+      if (stopBtn) {
+        stopBtn.style.display = "none";
+      }
     }
 
     render();
