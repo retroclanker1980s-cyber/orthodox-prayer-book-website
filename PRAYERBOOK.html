@@ -4,29 +4,45 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Orthodox Christian Prayer Book</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  
   <style>
     :root {
-      --bg-color: #f7f3e8; /* Warm cream background */
+      --bg-color: #f4efe6;
       --card-bg: #ffffff;
-      --text-color: #2c2a29;
-      --accent-color: #8b0000; /* Byzantine Gold/Burgundy */
-      --secondary-color: #d4af37;
-      --border-color: #e0dacf;
-      --font-family: 'Georgia', serif;
+      --text-main: #2b2625;
+      --text-muted: #6b635b;
+      --accent-burgundy: #7a1c1c;
+      --accent-burgundy-hover: #5c1313;
+      --gold-primary: #c59b27;
+      --gold-light: #e5c158;
+      --border-color: #e2d9cc;
+      --shadow-sm: 0 2px 8px rgba(43, 38, 37, 0.05);
+      --shadow-md: 0 6px 18px rgba(43, 38, 37, 0.08);
+      --shadow-lg: 0 12px 28px rgba(43, 38, 37, 0.12);
+      
+      --font-heading: 'Cinzel', serif;
+      --font-body: 'Cormorant Garamond', Georgia, serif;
+    }
+
+    * {
+      box-sizing: border-box;
     }
 
     body {
       margin: 0;
       padding: 0;
       background-color: var(--bg-color);
-      color: var(--text-color);
-      font-family: var(--font-family);
-      line-height: 1.6;
+      color: var(--text-main);
+      font-family: var(--font-body);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* Header & Blurred Banner Styling */
     header {
-      border-bottom: 4px solid var(--secondary-color);
+      border-bottom: 3px solid var(--gold-primary);
       position: relative;
       overflow: hidden;
     }
@@ -45,13 +61,10 @@
       object-fit: cover;
       object-position: center;
       display: block;
-      /* Soft blur effect on the banner */
       filter: blur(6px);
-      /* Slight scale prevents white border edges from the blur */
       transform: scale(1.05);
     }
 
-    /* Floating title box directly on top of the blurred banner */
     .header-text-block {
       position: absolute;
       top: 50%;
@@ -59,132 +72,298 @@
       transform: translate(-50%, -50%);
       text-align: center;
       color: #ffffff;
-      padding: 1.5rem 2rem;
-      background: rgba(0, 0, 0, 0.45); /* Soft dark overlay for easy reading */
-      border-radius: 12px;
-      border: 1px solid rgba(212, 175, 55, 0.5); /* Gold accent border */
+      padding: 2rem 2rem;
+      background: rgba(18, 14, 13, 0.65);
+      border-radius: 10px;
+      border: 1px solid var(--gold-primary);
+      box-shadow: var(--shadow-lg), inset 0 0 15px rgba(197, 155, 39, 0.15);
       backdrop-filter: blur(4px);
       width: 85%;
       max-width: 600px;
       box-sizing: border-box;
     }
 
+    .header-text-block::before {
+      content: "☦";
+      display: block;
+      font-size: 1.6rem;
+      color: var(--gold-primary);
+      margin-bottom: 0.2rem;
+      line-height: 1;
+    }
+
     header h1 {
       margin: 0;
+      font-family: var(--font-heading);
       font-size: 2.2rem;
-      letter-spacing: 1px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #fcfaf7;
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+      text-transform: uppercase;
     }
 
     header p {
       margin: 0.5rem 0 0;
+      font-size: 1.1rem;
       font-style: italic;
-      color: var(--secondary-color);
+      color: var(--gold-light);
       text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
     }
 
-    /* Main Container & Layout */
     .container {
-      max-width: 900px;
-      margin: 2rem auto;
-      padding: 0 1rem;
+      max-width: 920px;
+      margin: 2.5rem auto 4rem;
+      padding: 0 1.5rem;
+    }
+
+    .search-container {
+      position: relative;
+      margin-bottom: 1.8rem;
     }
 
     .search-box {
       width: 100%;
-      padding: 0.8rem;
-      font-size: 1rem;
+      padding: 0.9rem 1.2rem;
+      padding-left: 2.8rem;
+      font-size: 1.1rem;
+      font-family: var(--font-body);
+      color: var(--text-main);
+      background-color: var(--card-bg);
       border: 1px solid var(--border-color);
-      border-radius: 6px;
+      border-radius: 8px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.25s ease;
+    }
+
+    .search-box:focus {
+      outline: none;
+      border-color: var(--gold-primary);
+      box-shadow: 0 0 0 3px rgba(197, 155, 39, 0.2);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      pointer-events: none;
+    }
+
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 1.5rem;
-      box-sizing: border-box;
-      font-family: inherit;
+      flex-wrap: wrap;
+      gap: 0.8rem;
     }
 
     .breadcrumb {
-      margin-bottom: 1rem;
-      font-size: 0.95rem;
-      color: #666;
+      font-family: var(--font-heading);
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      text-transform: uppercase;
     }
 
     .breadcrumb span {
       cursor: pointer;
-      color: var(--accent-color);
+      color: var(--accent-burgundy);
+      font-weight: 700;
+      transition: color 0.2s;
+    }
+
+    .breadcrumb span:hover {
+      color: var(--gold-primary);
       text-decoration: underline;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--accent-burgundy);
+      color: #ffffff;
+      border: none;
+      padding: 0.5rem 1.1rem;
+      border-radius: 6px;
+      font-family: var(--font-heading);
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.15s;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .back-btn:hover {
+      background-color: var(--accent-burgundy-hover);
+      transform: translateY(-1px);
     }
 
     .card-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.25rem;
     }
 
     .card {
       background: var(--card-bg);
       border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 1.2rem;
+      border-radius: 10px;
+      padding: 1.5rem;
       cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--gold-primary);
+      opacity: 0;
+      transition: opacity 0.25s;
     }
 
     .card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      border-color: var(--accent-color);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+      border-color: rgba(197, 155, 39, 0.5);
+    }
+
+    .card:hover::before {
+      opacity: 1;
     }
 
     .card h3 {
-      margin: 0 0 0.5rem 0;
-      color: var(--accent-color);
+      margin: 0 0 0.6rem 0;
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      color: var(--accent-burgundy);
+      line-height: 1.3;
     }
 
     .card p {
       margin: 0;
-      font-size: 0.9rem;
-      color: #666;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card .action-link {
+      font-family: var(--font-heading);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: var(--gold-primary);
+      text-transform: uppercase;
     }
 
     .prayer-content {
       background: var(--card-bg);
       border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 2rem;
+      border-radius: 12px;
+      padding: 2.5rem 3rem;
+      box-shadow: var(--shadow-md);
       display: none;
+      position: relative;
     }
 
-    .prayer-content h2 {
-      color: var(--accent-color);
-      margin-top: 0;
-      border-bottom: 1px solid var(--border-color);
-      padding-bottom: 0.5rem;
+    .prayer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 1rem;
+      margin-bottom: 2rem;
+      gap: 1rem;
+    }
+
+    .prayer-title {
+      font-family: var(--font-heading);
+      font-size: 1.8rem;
+      color: var(--accent-burgundy);
+      margin: 0;
+    }
+
+    .prayer-toolbar {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .tool-btn {
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.4rem 0.7rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+
+    .tool-btn:hover {
+      border-color: var(--gold-primary);
+      color: var(--accent-burgundy);
     }
 
     .prayer-text {
       white-space: pre-line;
-      font-size: 1.1rem;
+      font-size: 1.25rem;
+      line-height: 1.8;
+      color: var(--text-main);
     }
 
-    .back-btn {
-      display: inline-block;
-      margin-bottom: 1rem;
-      background: var(--accent-color);
-      color: white;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-      cursor: pointer;
+    .ornament {
+      text-align: center;
+      color: var(--gold-primary);
+      font-size: 1.2rem;
+      margin: 2rem 0 0;
+      user-select: none;
     }
 
     @media (max-width: 600px) {
-      .card-grid {
-        grid-template-columns: 1fr;
+      .container {
+        padding: 0 1rem;
       }
+
+      .prayer-content {
+        padding: 1.5rem;
+      }
+
+      .prayer-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
       .banner-container {
         height: 200px;
       }
+
       header h1 {
         font-size: 1.6rem;
+      }
+
+      header p {
+        font-size: 0.95rem;
+      }
+
+      .card-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -202,21 +381,33 @@
   </header>
 
   <div class="container">
-    <input type="text" id="searchInput" class="search-box" placeholder="Search prayers..." oninput="handleSearch()">
-    
-    <div class="breadcrumb" id="breadcrumb"></div>
-    <button class="back-btn" id="backBtn" onclick="navigateBack()" style="display:none;">← Back</button>
+    <div class="search-container">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" class="search-box" placeholder="Search prayers by title or text..." oninput="handleSearch()">
+    </div>
+
+    <div class="nav-bar">
+      <div class="breadcrumb" id="breadcrumb"></div>
+      <button class="back-btn" id="backBtn" onclick="navigateBack()" style="display:none;">← Back</button>
+    </div>
 
     <div id="navigationGrid" class="card-grid"></div>
 
     <div id="prayerView" class="prayer-content">
-      <h2 id="prayerTitle"></h2>
+      <div class="prayer-header">
+        <h2 id="prayerTitle" class="prayer-title"></h2>
+        <div class="prayer-toolbar">
+          <button class="tool-btn" onclick="adjustFontSize(1)" title="Increase text size">A+</button>
+          <button class="tool-btn" onclick="adjustFontSize(-1)" title="Decrease text size">A-</button>
+          <button class="tool-btn" onclick="copyPrayer()" title="Copy prayer text">📋 Copy</button>
+        </div>
+      </div>
       <div id="prayerText" class="prayer-text"></div>
+      <div class="ornament">☦ ☦ ☦</div>
     </div>
   </div>
 
   <script>
-    // Nested Structure: Category -> Subcategory -> Prayer
     const prayerData = {
       "Daily Prayers": {
         "Morning Prayers": {
@@ -283,6 +474,7 @@ We now humbly beseech Thee, O Most Holy Master, do Thou travel also with Thy ser
     };
 
     let path = [];
+    let currentFontSize = 1.25;
 
     function render() {
       const grid = document.getElementById("navigationGrid");
@@ -301,10 +493,10 @@ We now humbly beseech Thee, O Most Holy Master, do Thou travel also with Thy ser
       for (let i = 0; i < path.length; i++) {
         const step = path[i];
         currentObj = currentObj[step];
-        breadcrumbHtml += ` > <span onclick="navigateTo([${path.slice(0, i + 1).map(s => `'${s}'`).join(',')}])">${step}</span>`;
+        breadcrumbHtml += ` &nbsp;›&nbsp; <span onclick="navigateTo([${path.slice(0, i + 1).map(s => `'${s}'`).join(',')}])">${step}</span>`;
       }
       breadcrumb.innerHTML = breadcrumbHtml;
-      backBtn.style.display = path.length > 0 ? "inline-block" : "none";
+      backBtn.style.display = path.length > 0 ? "inline-flex" : "none";
 
       if (typeof currentObj === "string") {
         grid.style.display = "none";
@@ -320,7 +512,7 @@ We now humbly beseech Thee, O Most Holy Master, do Thou travel also with Thy ser
         const isPrayer = typeof currentObj[key] === "string";
         card.innerHTML = `
           <h3>${key}</h3>
-          <p>${isPrayer ? "Read Prayer →" : "Explore Category →"}</p>
+          <p><span>${isPrayer ? "Prayer" : "Category"}</span> <span class="action-link">${isPrayer ? "Read →" : "Explore →"}</span></p>
         `;
         card.onclick = () => {
           searchInput.value = "";
@@ -351,7 +543,7 @@ We now humbly beseech Thee, O Most Holy Master, do Thou travel also with Thy ser
       }
 
       path = [];
-      document.getElementById("breadcrumb").innerHTML = "Search Results";
+      document.getElementById("breadcrumb").innerHTML = "SEARCH RESULTS";
       document.getElementById("backBtn").style.display = "none";
       
       const grid = document.getElementById("navigationGrid");
@@ -369,7 +561,7 @@ We now humbly beseech Thee, O Most Holy Master, do Thou travel also with Thy ser
               card.className = "card";
               card.innerHTML = `
                 <h3>${key}</h3>
-                <p>Location: ${nextPath.slice(0, -1).join(" > ")}</p>
+                <p>Location: ${nextPath.slice(0, -1).join(" › ")} <span class="action-link">Read →</span></p>
               `;
               card.onclick = () => {
                 path = nextPath;
@@ -385,11 +577,25 @@ We now humbly beseech Thee, O Most Holy Master, do Thou travel also with Thy ser
 
       searchRecursive(prayerData, []);
       if (grid.children.length === 0) {
-        grid.innerHTML = "<p>No prayers found matching your query.</p>";
+        grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 2rem;">No prayers found matching "${query}".</p>`;
       }
+    }
+
+    function adjustFontSize(delta) {
+      currentFontSize = Math.max(1.0, Math.min(1.8, currentFontSize + (delta * 0.1)));
+      document.getElementById("prayerText").style.fontSize = `${currentFontSize}rem`;
+    }
+
+    function copyPrayer() {
+      const title = document.getElementById("prayerTitle").innerText;
+      const text = document.getElementById("prayerText").innerText;
+      navigator.clipboard.writeText(`${title}\n\n${text}`).then(() => {
+        alert("Prayer text copied to clipboard!");
+      });
     }
 
     render();
   </script>
 </body>
 </html>
+    
