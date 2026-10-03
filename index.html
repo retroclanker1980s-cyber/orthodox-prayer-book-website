@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orthodox Christian Prayer Book</title>
+  <style>
+    :root {
+      --bg-color: #fcfbf7;
+      --card-bg: #ffffff;
+      --text-color: #2c2a29;
+      --accent-color: #8b0000; /* Byzantine Gold/Burgundy */
+      --secondary-color: #d4af37;
+      --border-color: #e0dacf;
+      --font-family: 'Georgia', serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: var(--font-family);
+      line-height: 1.6;
+    }
+
+    header {
+      background-color: var(--accent-color);
+      color: #ffffff;
+      text-align: center;
+      padding: 2rem 1rem;
+      border-bottom: 4px solid var(--secondary-color);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.2rem;
+      letter-spacing: 1px;
+    }
+
+    header p {
+      margin: 0.5rem 0 0;
+      font-style: italic;
+      color: var(--secondary-color);
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .search-box {
+      width: 100%;
+      padding: 0.8rem;
+      font-size: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      margin-bottom: 1.5rem;
+      box-sizing: border-box;
+      font-family: inherit;
+    }
+
+    .breadcrumb {
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+      color: #666;
+    }
+
+    .breadcrumb span {
+      cursor: pointer;
+      color: var(--accent-color);
+      text-decoration: underline;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.2rem;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border-color: var(--accent-color);
+    }
+
+    .card h3 {
+      margin: 0 0 0.5rem 0;
+      color: var(--accent-color);
+    }
+
+    .card p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .prayer-content {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 2rem;
+      display: none;
+    }
+
+    .prayer-content h2 {
+      color: var(--accent-color);
+      margin-top: 0;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.5rem;
+    }
+
+    .prayer-text {
+      white-space: pre-line;
+      font-size: 1.1rem;
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin-bottom: 1rem;
+      background: var(--accent-color);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 600px) {
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Orthodox Prayer Book</h1>
+    <p>A Treasury of Orthodox Christian Prayers</p>
+  </header>
+
+  <div class="container">
+    <input type="text" id="searchInput" class="search-box" placeholder="Search prayers..." oninput="handleSearch()">
+    
+    <div class="breadcrumb" id="breadcrumb"></div>
+    <button class="back-btn" id="backBtn" onclick="navigateBack()" style="display:none;">← Back</button>
+
+    <div id="navigationGrid" class="card-grid"></div>
+
+    <div id="prayerView" class="prayer-content">
+      <h2 id="prayerTitle"></h2>
+      <div id="prayerText" class="prayer-text"></div>
+    </div>
+  </div>
+
+  <script>
+    // Nested Structure: Category -> Subcategory -> Prayer
+    const prayerData = {
+      "Daily Prayers": {
+        "Morning Prayers": {
+          "The Trisagion Prayers": `In the Name of the Father, and of the Son, and of the Holy Spirit. Amen.
+
+Glory to Thee, our God, glory to Thee.
+
+O Heavenly King, Comforter, Spirit of Truth, Who art everywhere present and fillest all things, Treasury of good things and Giver of life: come and dwell in us, and cleanse us from every stain, and save our souls, O Good One.
+
+Holy God, Holy Mighty, Holy Immortal, have mercy on us. (3 times)
+
+Glory to the Father, and to the Son, and to the Holy Spirit, both now and ever, and unto the ages of ages. Amen.`,
+          "Morning Prayer of St. Philaret": `O Lord, grant me to greet the coming day in peace. Help me in all things to rely upon Thy holy will.
+
+In every hour of the day reveal Thy will to me. Bless my dealings with all who surround me. Teach me to treat all that comes to me throughout the day with peace of soul and with firm conviction that Thy will governs all.
+
+In all my deeds and words, guide my thoughts and feelings. In unforseen events, let me not forget that all are sent by Thee. Teach me to act firmly and wisely, without embittering and embarrassing others.
+
+Give me strength to bear the fatigue of the coming day with all that it shall bring. Direct my will, teach me to pray, pray Thou Thyself in me. Amen.`
+        },
+        "Evening Prayers": {
+          "Prayer to the Holy Spirit": `O Lord, Heavenly King, Comforter, the Spirit of Truth, show compassion and have mercy on me, Thy sinful servant, and forgive me, unworthy though I am.
+
+Forgive all the sins I have committed today as a human being, and not only as a human being, but worse than a beast—my voluntary and involuntary sins, known and unknown, resulting from youth and evil suggestions, or from habit and apathy.
+
+If I have sworn by Thy Name, or blasphemed it in my thought, or reproached anyone, or angered anyone, or lusted after something, forgive me, O Lord. Amen.`,
+          "Prayer of St. Macarius": `O Eternal God and King of all creation, Who hast vouchsafed me to arrive at this hour, forgive me the sins which I have committed this day in deed, word, and thought.
+
+Cleanse, O Lord, my humble soul from all defilement of flesh and spirit. Grant me, O Lord, to pass through the sleep of this night in peace, that when I rise from my bed I may please Thy holy Name all the days of my life. Amen.`
+        }
+      },
+      "Mealtime Prayers": {
+        "Before Meals": {
+          "Lord's Prayer & Blessing": `Our Father, Who art in heaven, hallowed be Thy name. Thy kingdom come, Thy will be done, on earth as it is in heaven. Give us this day our daily bread, and forgive us our trespasses, as we forgive those who trespass against us. And lead us not into temptation, but deliver us from evil.
+
+Glory to the Father, and to the Son, and to the Holy Spirit, both now and ever, and unto the ages of ages. Amen.
+
+Lord, have mercy (3 times). Father, bless.
+
+Christ our God, bless the food and drink of Thy servants, for Thou art holy, always, now and ever, and unto the ages of ages. Amen.`
+        },
+        "After Meals": {
+          "Thanksgiving After Meals": `We thank Thee, O Christ our God, for Thou hast satisfied us with Thy earthly gifts. Deprive us not also of Thy Heavenly Kingdom, but as Thou camest among Thy disciples, O Savior, giving them peace, come unto us and save us.
+
+Glory to the Father, and to the Son, and to the Holy Spirit, both now and ever, and unto the ages of ages. Amen.
+
+Lord, have mercy (3 times). Father, bless. Amen.`
+        }
+      },
+      "Occasional Prayers": {
+        "Prayers for the Sick": {
+          "Prayer for a Sick Person": `O Lord Almighty, the Healer of our souls and bodies, Who abasest and liftest up, Who chastinest and healest also: visit Thy servant who is sick with Thy mercy.
+
+Stretch forth Thine arm which is full of healing and health, and raise him/her up from his/her bed, and cure his/her illness. Rebuke the spirit of weakness, drive away from him/her all pain, all sores, all fever and ague.
+
+If he/she has sins or transgressions, grant remission and forgiveness, for Thou art the Lover of mankind. Amen.`
+        },
+        "Prayers Before Travel": {
+          "Prayer for Travellers": `O Lord Jesus Christ our God, the true and living Way, Who didst deem it worthy to travel with Thy supposed father Joseph and Thy most pure Mother to Egypt, and Who didst travel with Luke and Cleopas to Emmaus:
+
+We now humbly beseech Thee, O Most Holy Master, do Thou travel also with Thy servant(s). Deliver us from every storm and danger, preserve us in safety, and grant us a peaceful journey and a safe return. Amen.`
+        }
+      }
+    };
+
+    let path = [];
+
+    function render() {
+      const grid = document.getElementById("navigationGrid");
+      const prayerView = document.getElementById("prayerView");
+      const breadcrumb = document.getElementById("breadcrumb");
+      const backBtn = document.getElementById("backBtn");
+      const searchInput = document.getElementById("searchInput");
+
+      grid.style.display = "grid";
+      prayerView.style.display = "none";
+      grid.innerHTML = "";
+
+      // Render Breadcrumbs
+      let breadcrumbHtml = `<span onclick="navigateTo([])">Home</span>`;
+      let currentObj = prayerData;
+
+      for (let i = 0; i < path.length; i++) {
+        const step = path[i];
+        currentObj = currentObj[step];
+        breadcrumbHtml += ` > <span onclick="navigateTo([${path.slice(0, i + 1).map(s => `'${s}'`).join(',')}])">${step}</span>`;
+      }
+      breadcrumb.innerHTML = breadcrumbHtml;
+      backBtn.style.display = path.length > 0 ? "inline-block" : "none";
+
+      // If current object is a string, it's a prayer text
+      if (typeof currentObj === "string") {
+        grid.style.display = "none";
+        prayerView.style.display = "block";
+        document.getElementById("prayerTitle").innerText = path[path.length - 1];
+        document.getElementById("prayerText").innerText = currentObj;
+        return;
+      }
+
+      // Render categories or subcategories
+      Object.keys(currentObj).forEach(key => {
+        const card = document.createElement("div");
+        card.className = "card";
+        const isPrayer = typeof currentObj[key] === "string";
+        card.innerHTML = `
+          <h3>${key}</h3>
+          <p>${isPrayer ? "Read Prayer →" : "Explore Category →"}</p>
+        `;
+        card.onclick = () => {
+          searchInput.value = "";
+          path.push(key);
+          render();
+        };
+        grid.appendChild(card);
+      });
+    }
+
+    function navigateTo(newPath) {
+      path = newPath;
+      document.getElementById("searchInput").value = "";
+      render();
+    }
+
+    function navigateBack() {
+      path.pop();
+      document.getElementById("searchInput").value = "";
+      render();
+    }
+
+    function handleSearch() {
+      const query = document.getElementById("searchInput").value.toLowerCase();
+      if (!query) {
+        render();
+        return;
+      }
+
+      path = [];
+      document.getElementById("breadcrumb").innerHTML = "Search Results";
+      document.getElementById("backBtn").style.display = "none";
+      
+      const grid = document.getElementById("navigationGrid");
+      const prayerView = document.getElementById("prayerView");
+      grid.style.display = "grid";
+      prayerView.style.display = "none";
+      grid.innerHTML = "";
+
+      // Recursive search through prayer data
+      function searchRecursive(obj, currentPath) {
+        Object.keys(obj).forEach(key => {
+          const nextPath = [...currentPath, key];
+          if (typeof obj[key] === "string") {
+            if (key.toLowerCase().includes(query) || obj[key].toLowerCase().includes(query)) {
+              const card = document.createElement("div");
+              card.className = "card";
+              card.innerHTML = `
+                <h3>${key}</h3>
+                <p>Location: ${nextPath.slice(0, -1).join(" > ")}</p>
+              `;
+              card.onclick = () => {
+                path = nextPath;
+                render();
+              };
+              grid.appendChild(card);
+            }
+          } else {
+            searchRecursive(obj[key], nextPath);
+          }
+        });
+      }
+
+      searchRecursive(prayerData, []);
+      if (grid.children.length === 0) {
+        grid.innerHTML = "<p>No prayers found matching your query.</p>";
+      }
+    }
+
+    // Initial render
+    render();
+  </script>
+</body>
+</html>
